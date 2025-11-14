@@ -53,4 +53,10 @@ public class RaffleActivityOrder{
      */
     private Date updateTime;
 
+    private Integer totalCount;
+
+    private Integer dayCount;
+
+    private Integer monthCount;
+
 }
