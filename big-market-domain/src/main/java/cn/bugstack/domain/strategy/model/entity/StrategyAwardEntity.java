@@ -29,4 +29,12 @@ public class StrategyAwardEntity {
     /** 奖品中奖概率 */
     private BigDecimal awardRate;
 
+    private Integer sort;
+
+    private String awardTitle;
+
+    private String awardSubtitle;
+
+
+
 }
