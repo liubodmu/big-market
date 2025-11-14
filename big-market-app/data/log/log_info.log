@@ -333,3 +333,72 @@ Caused by: com.fasterxml.jackson.databind.exc.InvalidTypeIdException: Could not 
 25-11-13.10:15:10.012 [scheduling-1    ] INFO  UpdateAwardStockJob    - 定时任务，更新奖品消耗库存【延迟队列获取，降低对数据库的更新频次，不要产生竞争】
 25-11-13.10:15:11.625 [SpringApplicationShutdownHook] INFO  HikariDataSource       - HikariPool-1 - Shutdown initiated...
 25-11-13.10:15:11.670 [SpringApplicationShutdownHook] INFO  HikariDataSource       - HikariPool-1 - Shutdown completed.
+25-11-14.16:27:02.993 [main            ] INFO  RaffleActivityDaoTest  - Starting RaffleActivityDaoTest using Java 1.8.0_361 on LAPTOP-3RQGE8KT with PID 10748 (started by chinese youth in F:\big-market\big-market\big-market-app)
+25-11-14.16:27:02.998 [main            ] INFO  RaffleActivityDaoTest  - The following 1 profile is active: "dev"
+25-11-14.16:27:05.817 [main            ] INFO  RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+25-11-14.16:27:05.829 [main            ] INFO  RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+25-11-14.16:27:05.952 [main            ] INFO  RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 62 ms. Found 0 Redis repository interfaces.
+25-11-14.16:27:09.803 [main            ] INFO  Version                - Redisson 3.26.0
+25-11-14.16:27:11.567 [redisson-netty-1-5] INFO  ConnectionsHolder      - 1 connections initialized for 127.0.0.1/127.0.0.1:16379
+25-11-14.16:27:11.616 [redisson-netty-1-13] INFO  ConnectionsHolder      - 5 connections initialized for 127.0.0.1/127.0.0.1:16379
+25-11-14.16:27:17.141 [main            ] INFO  EndpointLinksResolver  - Exposing 1 endpoint(s) beneath base path '/actuator'
+25-11-14.16:27:17.359 [main            ] INFO  RaffleActivityDaoTest  - Started RaffleActivityDaoTest in 16.011 seconds (JVM running for 19.53)
+25-11-14.16:27:18.357 [main            ] INFO  HikariDataSource       - Retail_HikariCP - Starting...
+25-11-14.16:27:20.015 [scheduling-1    ] INFO  UpdateAwardStockJob    - 定时任务，更新奖品消耗库存【延迟队列获取，降低对数据库的更新频次，不要产生竞争】
+25-11-14.16:27:20.175 [scheduling-1    ] INFO  UpdateAwardStockJob    - 定时任务，更新奖品消耗库存 strategyId:100006 awardId:101
+25-11-14.16:27:20.625 [main            ] INFO  HikariDataSource       - Retail_HikariCP - Start completed.
+25-11-14.16:33:56.358 [main            ] INFO  RaffleActivityDaoTest  - Starting RaffleActivityDaoTest using Java 1.8.0_361 on LAPTOP-3RQGE8KT with PID 22020 (started by chinese youth in F:\big-market\big-market\big-market-app)
+25-11-14.16:33:56.363 [main            ] INFO  RaffleActivityDaoTest  - The following 1 profile is active: "dev"
+25-11-14.16:34:00.686 [main            ] INFO  RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+25-11-14.16:34:00.737 [main            ] INFO  RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+25-11-14.16:34:00.984 [main            ] INFO  RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 108 ms. Found 0 Redis repository interfaces.
+25-11-14.16:34:05.390 [main            ] INFO  Version                - Redisson 3.26.0
+25-11-14.16:34:07.154 [redisson-netty-1-4] INFO  ConnectionsHolder      - 1 connections initialized for 127.0.0.1/127.0.0.1:16379
+25-11-14.16:34:07.208 [redisson-netty-1-13] INFO  ConnectionsHolder      - 5 connections initialized for 127.0.0.1/127.0.0.1:16379
+25-11-14.16:34:14.265 [main            ] INFO  EndpointLinksResolver  - Exposing 1 endpoint(s) beneath base path '/actuator'
+25-11-14.16:34:14.511 [main            ] INFO  RaffleActivityDaoTest  - Started RaffleActivityDaoTest in 20.786 seconds (JVM running for 29.186)
+25-11-14.16:34:15.004 [scheduling-1    ] INFO  UpdateAwardStockJob    - 定时任务，更新奖品消耗库存【延迟队列获取，降低对数据库的更新频次，不要产生竞争】
+25-11-14.16:34:15.676 [main            ] INFO  HikariDataSource       - Retail_HikariCP - Starting...
+25-11-14.16:34:17.888 [main            ] INFO  HikariDataSource       - Retail_HikariCP - Start completed.
+25-11-14.16:34:18.714 [main            ] INFO  RaffleActivityDaoTest  - 测试结果：{"activityCountId":1,"activityDesc":"测试活动","activityId":100301,"activityName":"测试活动","beginDateTime":"2024-03-09 18:15:10","endDateTime":"2034-03-09 18:15:10","state":"0","stockCount":1000,"stockCountSurplus":1000,"strategyId":100006}
+25-11-14.16:35:10.416 [main            ] INFO  RaffleActivityOrderDaoTest - Starting RaffleActivityOrderDaoTest using Java 1.8.0_361 on LAPTOP-3RQGE8KT with PID 16408 (started by chinese youth in F:\big-market\big-market\big-market-app)
+25-11-14.16:35:10.422 [main            ] INFO  RaffleActivityOrderDaoTest - The following 1 profile is active: "dev"
+25-11-14.16:35:14.830 [main            ] INFO  RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+25-11-14.16:35:14.837 [main            ] INFO  RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+25-11-14.16:35:14.951 [main            ] INFO  RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 59 ms. Found 0 Redis repository interfaces.
+25-11-14.16:35:20.667 [main            ] INFO  Version                - Redisson 3.26.0
+25-11-14.16:35:22.839 [redisson-netty-1-4] INFO  ConnectionsHolder      - 1 connections initialized for 127.0.0.1/127.0.0.1:16379
+25-11-14.16:35:22.890 [redisson-netty-1-13] INFO  ConnectionsHolder      - 5 connections initialized for 127.0.0.1/127.0.0.1:16379
+25-11-14.16:35:31.931 [main            ] INFO  EndpointLinksResolver  - Exposing 1 endpoint(s) beneath base path '/actuator'
+25-11-14.16:35:32.204 [main            ] INFO  RaffleActivityOrderDaoTest - Started RaffleActivityOrderDaoTest in 24.689 seconds (JVM running for 32.598)
+25-11-14.16:35:32.993 [main            ] INFO  HikariDataSource       - Retail_HikariCP - Starting...
+25-11-14.16:35:35.002 [scheduling-1    ] INFO  UpdateAwardStockJob    - 定时任务，更新奖品消耗库存【延迟队列获取，降低对数据库的更新频次，不要产生竞争】
+25-11-14.16:35:35.410 [main            ] INFO  HikariDataSource       - Retail_HikariCP - Start completed.
+25-11-14.16:37:37.617 [main            ] INFO  RaffleActivityOrderDaoTest - Starting RaffleActivityOrderDaoTest using Java 1.8.0_361 on LAPTOP-3RQGE8KT with PID 2348 (started by chinese youth in F:\big-market\big-market\big-market-app)
+25-11-14.16:37:37.623 [main            ] INFO  RaffleActivityOrderDaoTest - The following 1 profile is active: "dev"
+25-11-14.16:37:41.500 [main            ] INFO  RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+25-11-14.16:37:41.509 [main            ] INFO  RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+25-11-14.16:37:41.615 [main            ] INFO  RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 57 ms. Found 0 Redis repository interfaces.
+25-11-14.16:37:46.275 [main            ] INFO  Version                - Redisson 3.26.0
+25-11-14.16:37:47.881 [redisson-netty-1-5] INFO  ConnectionsHolder      - 1 connections initialized for 127.0.0.1/127.0.0.1:16379
+25-11-14.16:37:47.944 [redisson-netty-1-13] INFO  ConnectionsHolder      - 5 connections initialized for 127.0.0.1/127.0.0.1:16379
+25-11-14.16:37:54.392 [main            ] INFO  EndpointLinksResolver  - Exposing 1 endpoint(s) beneath base path '/actuator'
+25-11-14.16:37:54.668 [main            ] INFO  RaffleActivityOrderDaoTest - Started RaffleActivityOrderDaoTest in 19.789 seconds (JVM running for 25.249)
+25-11-14.16:37:55.006 [scheduling-1    ] INFO  UpdateAwardStockJob    - 定时任务，更新奖品消耗库存【延迟队列获取，降低对数据库的更新频次，不要产生竞争】
+25-11-14.16:37:55.700 [main            ] INFO  HikariDataSource       - Retail_HikariCP - Starting...
+25-11-14.16:37:57.419 [main            ] INFO  HikariDataSource       - Retail_HikariCP - Start completed.
+25-11-14.16:38:12.494 [main            ] INFO  RaffleActivityOrderDaoTest - Starting RaffleActivityOrderDaoTest using Java 1.8.0_361 on LAPTOP-3RQGE8KT with PID 19980 (started by chinese youth in F:\big-market\big-market\big-market-app)
+25-11-14.16:38:12.498 [main            ] INFO  RaffleActivityOrderDaoTest - The following 1 profile is active: "dev"
+25-11-14.16:38:16.468 [main            ] INFO  RepositoryConfigurationDelegate - Multiple Spring Data modules found, entering strict repository configuration mode
+25-11-14.16:38:16.482 [main            ] INFO  RepositoryConfigurationDelegate - Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+25-11-14.16:38:16.585 [main            ] INFO  RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 68 ms. Found 0 Redis repository interfaces.
+25-11-14.16:38:22.731 [main            ] INFO  Version                - Redisson 3.26.0
+25-11-14.16:38:24.479 [redisson-netty-1-4] INFO  ConnectionsHolder      - 1 connections initialized for 127.0.0.1/127.0.0.1:16379
+25-11-14.16:38:24.547 [redisson-netty-1-13] INFO  ConnectionsHolder      - 5 connections initialized for 127.0.0.1/127.0.0.1:16379
+25-11-14.16:38:33.165 [main            ] INFO  EndpointLinksResolver  - Exposing 1 endpoint(s) beneath base path '/actuator'
+25-11-14.16:38:33.415 [main            ] INFO  RaffleActivityOrderDaoTest - Started RaffleActivityOrderDaoTest in 22.645 seconds (JVM running for 26.697)
+25-11-14.16:38:34.294 [main            ] INFO  HikariDataSource       - Retail_HikariCP - Starting...
+25-11-14.16:38:35.010 [scheduling-1    ] INFO  UpdateAwardStockJob    - 定时任务，更新奖品消耗库存【延迟队列获取，降低对数据库的更新频次，不要产生竞争】
+25-11-14.16:38:36.492 [main            ] INFO  HikariDataSource       - Retail_HikariCP - Start completed.
+25-11-14.16:38:36.615 [main            ] INFO  HikariDataSource       - Retail_HikariCP - Starting...
+25-11-14.16:38:36.696 [main            ] INFO  HikariDataSource       - Retail_HikariCP - Start completed.
