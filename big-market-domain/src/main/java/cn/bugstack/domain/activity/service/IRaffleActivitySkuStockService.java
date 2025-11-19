@@ -1,6 +1,6 @@
 package cn.bugstack.domain.activity.service;
 import cn.bugstack.domain.activity.model.valobj.ActivitySkuStockKeyVO;
-public interface ISkuStock {
+public interface IRaffleActivitySkuStockService {
 
     ActivitySkuStockKeyVO takeQueueValue() throws InterruptedException;
 

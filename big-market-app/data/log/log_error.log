@@ -514,8 +514,8 @@ org.springframework.dao.DuplicateKeyException:
 	at org.springframework.aop.framework.CglibAopProxy$CglibMethodInvocation.proceed(CglibAopProxy.java:763)
 	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:708)
 	at cn.bugstack.infrastructure.persistent.repository.ActivityRepository$$EnhancerBySpringCGLIB$$1a411539.doSaveOrder(<generated>)
-	at cn.bugstack.domain.activity.service.RaffleActivityService.doSaveOrder(RaffleActivityService.java:56)
-	at cn.bugstack.domain.activity.service.AbstractRaffleActivity.createSkuRechargeOrder(AbstractRaffleActivity.java:68)
+	at cn.bugstack.domain.activity.service.quota.RaffleActivityAccountQuotaService.doSaveOrder(RaffleActivityService.java:56)
+	at cn.bugstack.domain.activity.service.quota.AbstractRaffleActivityAccountQuota.createSkuRechargeOrder(AbstractRaffleActivity.java:68)
 	at cn.bugstack.test.domain.activity.RaffleOrderTest.test_createSkuRechargeOrder_duplicate(RaffleOrderTest.java:57)
 	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
@@ -580,3 +580,7 @@ Caused by: java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '7
 	... 77 common frames omitted
 25-11-18.15:38:04.150 [Retail_HikariCP housekeeper] WARN  HikariPool             - Retail_HikariCP - Thread starvation or clock leap detected (housekeeper delta=1m12s67ms471µs200ns).
 25-11-18.15:39:58.298 [Retail_HikariCP housekeeper] WARN  HikariPool             - Retail_HikariCP - Thread starvation or clock leap detected (housekeeper delta=1m54s166ms74µs400ns).
+25-11-18.21:29:08.882 [Retail_HikariCP housekeeper] WARN  HikariPool             - Retail_HikariCP - Thread starvation or clock leap detected (housekeeper delta=3m10s496ms90µs900ns).
+25-11-18.21:41:36.677 [Retail_HikariCP housekeeper] WARN  HikariPool             - Retail_HikariCP - Thread starvation or clock leap detected (housekeeper delta=56s822ms8µs500ns).
+25-11-18.21:54:59.745 [Retail_HikariCP housekeeper] WARN  HikariPool             - Retail_HikariCP - Thread starvation or clock leap detected (housekeeper delta=13m24s770ms904µs500ns).
+25-11-18.21:58:24.699 [Retail_HikariCP housekeeper] WARN  HikariPool             - Retail_HikariCP - Thread starvation or clock leap detected (housekeeper delta=50s192ms342µs).

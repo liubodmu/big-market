@@ -1,4 +1,6 @@
 package cn.bugstack.infrastructure.persistent.po;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
@@ -8,8 +10,18 @@ import java.util.Date;
  * @description 用户抽奖订单表
  * @create 2024-04-03 15:30
  */
-@Data
 
+import lombok.NoArgsConstructor;
+
+/**
+ * @author Fuzhengwei bugstack.cn @小傅哥
+ * @description 用户抽奖订单表
+ * @create 2024-04-03 15:30
+ */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserRaffleOrder {
     /** 用户ID */
     private String id;
