@@ -1,0 +1,1 @@
+function n(t){return t==null?"0.00":Number(t).toFixed(2)}function e(t){return Math.round(t*100)}function r(t){return t==="complete"||t==="completed"}function u(t){return r(t)?"已发奖":t==="fail"?"发奖失败":"发奖中"}export{u as a,n as f,r as i,e as t};
