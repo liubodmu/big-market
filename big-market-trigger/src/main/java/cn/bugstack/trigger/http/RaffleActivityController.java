@@ -2,6 +2,7 @@ package cn.bugstack.trigger.http;
 
 import cn.bugstack.domain.activity.model.entity.*;
 import cn.bugstack.domain.activity.model.valobj.OrderTradeTypeVO;
+import cn.bugstack.domain.activity.repository.IActivityRepository;
 import cn.bugstack.domain.activity.service.IRaffleActivityAccountQuotaService;
 import cn.bugstack.domain.activity.service.IRaffleActivityPartakeService;
 import cn.bugstack.domain.activity.service.IRaffleActivitySkuProductService;
@@ -77,6 +78,8 @@ public class RaffleActivityController implements IRaffleActivityService {
     private IBehaviorRebateService behaviorRebateService;
     @Resource
     private ICreditAdjustService creditAdjustService;
+    @Resource
+    private IActivityRepository activityRepository;
 
     // dcc 统一配置中心动态配置降级开关
 //    @DCCValue("degradeSwitch:close")
@@ -121,6 +124,88 @@ public class RaffleActivityController implements IRaffleActivityService {
     }
 
     /**
+     * 查询活动列表
+     *
+     * @return 活动列表
+     * <p>
+     * 接口：<a href="http://localhost:8091/api/v1/raffle/activity/query_activity_list">/api/v1/raffle/activity/query_activity_list</a>
+     */
+    @RequestMapping(value = "query_activity_list", method = RequestMethod.GET)
+    @Override
+    public Response<List<ActivityListResponseDTO>> queryActivityList() {
+        try {
+            log.info("查询活动列表，开始");
+            List<ActivityEntity> activityEntities = activityRepository.queryActivityList();
+            List<ActivityListResponseDTO> responseDTOS = new ArrayList<>(activityEntities.size());
+            for (ActivityEntity activityEntity : activityEntities) {
+                responseDTOS.add(ActivityListResponseDTO.builder()
+                        .activityId(activityEntity.getActivityId())
+                        .activityName(activityEntity.getActivityName())
+                        .activityDesc(activityEntity.getActivityDesc())
+                        .beginDateTime(activityEntity.getBeginDateTime())
+                        .endDateTime(activityEntity.getEndDateTime())
+                        .strategyId(activityEntity.getStrategyId())
+                        .state(activityEntity.getState() == null ? null : activityEntity.getState().getCode())
+                        .build());
+            }
+            log.info("查询活动列表，完成 size:{}", responseDTOS.size());
+            return Response.<List<ActivityListResponseDTO>>builder()
+                    .code(ResponseCode.SUCCESS.getCode())
+                    .info(ResponseCode.SUCCESS.getInfo())
+                    .data(responseDTOS)
+                    .build();
+        } catch (Exception e) {
+            log.error("查询活动列表，失败", e);
+            return Response.<List<ActivityListResponseDTO>>builder()
+                    .code(ResponseCode.UN_ERROR.getCode())
+                    .info(ResponseCode.UN_ERROR.getInfo())
+                    .build();
+        }
+    }
+
+    /**
+     * 查询用户中奖记录
+     *
+     * @param userId 用户ID
+     * @return 中奖记录列表
+     * <p>
+     * 接口：<a href="http://localhost:8091/api/v1/raffle/activity/query_user_award_record">/api/v1/raffle/activity/query_user_award_record</a>
+     */
+    @RequestMapping(value = "query_user_award_record", method = RequestMethod.POST)
+    @Override
+    public Response<List<UserAwardRecordResponseDTO>> queryUserAwardRecord(@RequestParam String userId) {
+        try {
+            log.info("查询用户中奖记录，开始 userId:{}", userId);
+            List<UserAwardRecordEntity> userAwardRecordEntities = awardService.queryUserAwardRecordList(userId);
+            List<UserAwardRecordResponseDTO> responseDTOS = new ArrayList<>(userAwardRecordEntities.size());
+            for (UserAwardRecordEntity recordEntity : userAwardRecordEntities) {
+                responseDTOS.add(UserAwardRecordResponseDTO.builder()
+                        .userId(recordEntity.getUserId())
+                        .activityId(recordEntity.getActivityId())
+                        .strategyId(recordEntity.getStrategyId())
+                        .orderId(recordEntity.getOrderId())
+                        .awardId(recordEntity.getAwardId())
+                        .awardTitle(recordEntity.getAwardTitle())
+                        .awardTime(recordEntity.getAwardTime())
+                        .awardState(recordEntity.getAwardState() == null ? null : recordEntity.getAwardState().getCode())
+                        .build());
+            }
+            log.info("查询用户中奖记录，完成 userId:{} size:{}", userId, responseDTOS.size());
+            return Response.<List<UserAwardRecordResponseDTO>>builder()
+                    .code(ResponseCode.SUCCESS.getCode())
+                    .info(ResponseCode.SUCCESS.getInfo())
+                    .data(responseDTOS)
+                    .build();
+        } catch (Exception e) {
+            log.error("查询用户中奖记录，失败 userId:{}", userId, e);
+            return Response.<List<UserAwardRecordResponseDTO>>builder()
+                    .code(ResponseCode.UN_ERROR.getCode())
+                    .info(ResponseCode.UN_ERROR.getInfo())
+                    .build();
+        }
+    }
+
+    /**
      * 抽奖接口
      *
      * @param request 请求对象
@@ -143,9 +228,9 @@ public class RaffleActivityController implements IRaffleActivityService {
      * permitsPerSecond：每秒的访问频次限制
      * blacklistCount：超过多少次都被限制了，还访问的，扔到黑名单里24小时
      */
-    @RateLimiterAccessInterceptor(key = "userId", fallbackMethod = "drawRateLimiterError", permitsPerSecond = 1.0d, blacklistCount = 1)
+    @RateLimiterAccessInterceptor(key = "userId", fallbackMethod = "drawRateLimiterError", permitsPerSecond = 1.0d, blacklistCount = 5)
     @HystrixCommand(commandProperties = {
-            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "150")
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000")
     }, fallbackMethod = "drawHystrixError"
     )
     @RequestMapping(value = "draw", method = RequestMethod.POST)

@@ -6,7 +6,6 @@ import cn.bugstack.domain.credit.model.entity.CreditAccountEntity;
 import cn.bugstack.domain.credit.model.entity.CreditOrderEntity;
 import cn.bugstack.domain.credit.model.entity.TaskEntity;
 import cn.bugstack.domain.credit.repository.ICreditRepository;
-import cn.bugstack.infrastructure.event.EventPublisher;
 import cn.bugstack.infrastructure.dao.ITaskDao;
 import cn.bugstack.infrastructure.dao.IUserCreditAccountDao;
 import cn.bugstack.infrastructure.dao.IUserCreditOrderDao;
@@ -50,8 +49,6 @@ public class CreditRepository implements ICreditRepository {
     private IDBRouterStrategy dbRouter;
     @Resource
     private TransactionTemplate transactionTemplate;
-    @Resource
-    private EventPublisher eventPublisher;
 
     @Override
     public void saveUserCreditTradeOrder(TradeAggregate tradeAggregate) {
@@ -127,16 +124,9 @@ public class CreditRepository implements ICreditRepository {
             }
         }
 
-        try {
-            // 发送消息【在事务外执行，如果失败还有任务补偿】
-            eventPublisher.publish(task.getTopic(), task.getMessage());
-            // 更新数据库记录，task 任务表
-            taskDao.updateTaskSendMessageCompleted(task);
-            log.info("调整账户积分记录，发送MQ消息完成 userId: {} orderId:{} topic: {}", userId, creditOrderEntity.getOrderId(), task.getTopic());
-        } catch (Exception e) {
-            log.error("调整账户积分记录，发送MQ消息失败 userId: {} topic: {}", userId, task.getTopic());
-            taskDao.updateTaskSendMessageFail(task);
-        }
+        // MQ 消息不再在此请求线程同步发送（避免 RabbitMQ 阻塞积分调整请求）。
+        // task 表已在事务内落库（state=create），由 SendMessageTaskJob 每 5 秒扫描补发。
+        log.info("调整账户积分记录完成，MQ 消息交由定时任务发送 userId: {} orderId:{} topic: {}", userId, creditOrderEntity.getOrderId(), task.getTopic());
 
     }
 

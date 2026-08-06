@@ -4,6 +4,8 @@ import cn.bugstack.infrastructure.dao.po.UserAwardRecord;
 import cn.bugstack.middleware.db.router.annotation.DBRouterStrategy;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * @author Fuzhengwei bugstack.cn @小傅哥
  * @description 用户中奖记录表
@@ -16,5 +18,7 @@ public interface IUserAwardRecordDao {
     void insert(UserAwardRecord userAwardRecord);
 
     int updateAwardRecordCompletedState(UserAwardRecord userAwardRecordReq);
+
+    List<UserAwardRecord> queryUserAwardRecordList(UserAwardRecord userAwardRecordReq);
 
 }

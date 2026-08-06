@@ -17,7 +17,7 @@ app:
 # Spring 配置；rabbitmq
 spring:
   rabbitmq:
-    addresses: 192.168.1.108
+    addresses: 127.0.0.1
     port: 5672
     username: admin
     password: admin
@@ -31,7 +31,7 @@ spring:
       credit_adjust_success: credit_adjust_success
   elasticsearch.datasource:
     driverClassName: org.elasticsearch.xpack.sql.jdbc.EsDriver
-    url: jdbc:es://http://192.168.1.108:9200
+    url: jdbc:es://http://127.0.0.1:9200
 
 # 线程池配置
 thread:
@@ -57,7 +57,7 @@ mini-db-router:
       list: db01,db02
       db00:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://192.168.1.108:13306/big_market?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&useSSL=true
+        url: jdbc:mysql://127.0.0.1:13306/big_market?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&useSSL=true
         username: root
         password: 123456
         type-class-name: com.zaxxer.hikari.HikariDataSource
@@ -72,7 +72,7 @@ mini-db-router:
           connection-test-query: SELECT 1
       db01:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://192.168.1.108:13306/big_market_01?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&useSSL=true
+        url: jdbc:mysql://127.0.0.1:13306/big_market_01?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&useSSL=true
         username: root
         password: 123456
         type-class-name: com.zaxxer.hikari.HikariDataSource
@@ -87,7 +87,7 @@ mini-db-router:
           connection-test-query: SELECT 1
       db02:
         driver-class-name: com.mysql.cj.jdbc.Driver
-        url: jdbc:mysql://192.168.1.108:13306/big_market_02?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&useSSL=true
+        url: jdbc:mysql://127.0.0.1:13306/big_market_02?useUnicode=true&characterEncoding=utf8&autoReconnect=true&zeroDateTimeBehavior=convertToNull&serverTimezone=UTC&useSSL=true
         username: root
         password: 123456
         type-class-name: com.zaxxer.hikari.HikariDataSource
@@ -109,7 +109,7 @@ mybatis:
 redis:
   sdk:
     config:
-      host: 192.168.1.108
+      host: 127.0.0.1
       port: 16379
       pool-size: 10
       min-idle-size: 5
@@ -120,23 +120,25 @@ redis:
       ping-interval: 60000
       keep-alive: true
 
-dubbo:
-  application:
-    name: big-market
-    version: 1.0
-  registry:
-    id: nacos-registry
-    address: nacos://192.168.1.108:8848
-  protocol:
-    name: dubbo
-    port: -1
-  scan:
-    base-packages: cn.bugstack.trigger.api
+# dubbo 暂停：Nacos 容器在低内存 Docker 下起不来（ProcessorMetrics NPE），先跑通抽奖主流程
+# 如需开启，恢复本段并确保 Nacos 可访问
+#dubbo:
+#  application:
+#    name: big-market
+#    version: 1.0
+#  registry:
+#    id: nacos-registry
+#    address: nacos://127.0.0.1:8848
+#  protocol:
+#    name: dubbo
+#    port: -1
+#  scan:
+#    base-packages: cn.bugstack.trigger.api
 
 zookeeper:
   sdk:
     config:
-      connect-string: 192.168.1.108:2181
+      connect-string: 127.0.0.1:2181
       base-sleep-time-ms: 1000
       max-retries: 3
       session-timeout-ms: 18000

@@ -6,9 +6,9 @@ import cn.bugstack.domain.award.model.entity.TaskEntity;
 import cn.bugstack.domain.award.model.entity.UserAwardRecordEntity;
 import cn.bugstack.domain.award.model.entity.UserCreditAwardEntity;
 import cn.bugstack.domain.award.model.valobj.AccountStatusVO;
+import cn.bugstack.domain.award.model.valobj.AwardStateVO;
 import cn.bugstack.domain.award.repository.IAwardRepository;
 import cn.bugstack.infrastructure.dao.*;
-import cn.bugstack.infrastructure.event.EventPublisher;
 import cn.bugstack.infrastructure.dao.po.Task;
 import cn.bugstack.infrastructure.dao.po.UserAwardRecord;
 import cn.bugstack.infrastructure.dao.po.UserCreditAccount;
@@ -26,6 +26,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -51,8 +53,6 @@ public class AwardRepository implements IAwardRepository {
     private IDBRouterStrategy dbRouter;
     @Resource
     private TransactionTemplate transactionTemplate;
-    @Resource
-    private EventPublisher eventPublisher;
     @Resource
     private IRedisService redisService;
 
@@ -112,16 +112,10 @@ public class AwardRepository implements IAwardRepository {
             dbRouter.clear();
         }
 
-        try {
-            // 发送消息【在事务外执行，如果失败还有任务补偿】
-            eventPublisher.publish(task.getTopic(), task.getMessage());
-            // 更新数据库记录，task 任务表
-            taskDao.updateTaskSendMessageCompleted(task);
-            log.info("写入中奖记录，发送MQ消息完成 userId: {} orderId:{} topic: {}", userId, userAwardRecordEntity.getOrderId(), task.getTopic());
-        } catch (Exception e) {
-            log.error("写入中奖记录，发送MQ消息失败 userId: {} topic: {}", userId, task.getTopic());
-            taskDao.updateTaskSendMessageFail(task);
-        }
+        // MQ 消息不再在此请求线程同步发送（避免 RabbitMQ 阻塞抽奖请求）。
+        // task 表已在事务内落库（state=create），由 SendMessageTaskJob 每 5 秒扫描补发，
+        // 失败可重试、消息不丢。中奖记录状态也由发奖消费者更新。
+        log.info("写入中奖记录完成，MQ 消息交由定时任务发送 userId: {} orderId:{} topic: {}", userId, userAwardRecordEntity.getOrderId(), task.getTopic());
 
     }
 
@@ -185,6 +179,38 @@ public class AwardRepository implements IAwardRepository {
     @Override
     public String queryAwardKey(Integer awardId) {
         return awardDao.queryAwardKeyByAwardId(awardId);
+    }
+
+    @Override
+    public List<UserAwardRecordEntity> queryUserAwardRecordList(String userId) {
+        UserAwardRecord userAwardRecordReq = new UserAwardRecord();
+        userAwardRecordReq.setUserId(userId);
+        try {
+            dbRouter.doRouter(userId);
+            List<UserAwardRecord> userAwardRecords = userAwardRecordDao.queryUserAwardRecordList(userAwardRecordReq);
+            if (null == userAwardRecords || userAwardRecords.isEmpty()) return new ArrayList<>();
+            List<UserAwardRecordEntity> userAwardRecordEntities = new ArrayList<>(userAwardRecords.size());
+            for (UserAwardRecord userAwardRecord : userAwardRecords) {
+                // 兼容历史数据：updateAwardRecordCompletedState 曾硬编码 'completed'，而枚举 code 是 'complete'
+                String stateCode = userAwardRecord.getAwardState();
+                AwardStateVO awardState = "completed".equals(stateCode)
+                        ? AwardStateVO.complete
+                        : AwardStateVO.valueOf(stateCode);
+                userAwardRecordEntities.add(UserAwardRecordEntity.builder()
+                        .userId(userAwardRecord.getUserId())
+                        .activityId(userAwardRecord.getActivityId())
+                        .strategyId(userAwardRecord.getStrategyId())
+                        .orderId(userAwardRecord.getOrderId())
+                        .awardId(userAwardRecord.getAwardId())
+                        .awardTitle(userAwardRecord.getAwardTitle())
+                        .awardTime(userAwardRecord.getAwardTime())
+                        .awardState(awardState)
+                        .build());
+            }
+            return userAwardRecordEntities;
+        } finally {
+            dbRouter.clear();
+        }
     }
 
 }

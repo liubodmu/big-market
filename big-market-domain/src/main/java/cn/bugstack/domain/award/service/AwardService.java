@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -85,6 +86,11 @@ public class AwardService implements IAwardService {
 
         // 发放奖品
         distributeAward.giveOutPrizes(distributeAwardEntity);
+    }
+
+    @Override
+    public List<UserAwardRecordEntity> queryUserAwardRecordList(String userId) {
+        return awardRepository.queryUserAwardRecordList(userId);
     }
 
 }

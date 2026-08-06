@@ -3,6 +3,8 @@ package cn.bugstack.infrastructure.dao;
 import cn.bugstack.infrastructure.dao.po.RaffleActivity;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * @author Fuzhengwei bugstack.cn @小傅哥
  * @description 抽奖活动表Dao
@@ -16,5 +18,7 @@ public interface IRaffleActivityDao {
     Long queryStrategyIdByActivityId(Long activityId);
 
     Long queryActivityIdByStrategyId(Long strategyId);
+
+    List<RaffleActivity> queryActivityList();
 
 }

@@ -109,6 +109,25 @@ public class ActivityRepository implements IActivityRepository {
     }
 
     @Override
+    public List<ActivityEntity> queryActivityList() {
+        List<RaffleActivity> raffleActivities = raffleActivityDao.queryActivityList();
+        if (null == raffleActivities || raffleActivities.isEmpty()) return new ArrayList<>();
+        List<ActivityEntity> activityEntities = new ArrayList<>(raffleActivities.size());
+        for (RaffleActivity raffleActivity : raffleActivities) {
+            activityEntities.add(ActivityEntity.builder()
+                    .activityId(raffleActivity.getActivityId())
+                    .activityName(raffleActivity.getActivityName())
+                    .activityDesc(raffleActivity.getActivityDesc())
+                    .beginDateTime(raffleActivity.getBeginDateTime())
+                    .endDateTime(raffleActivity.getEndDateTime())
+                    .strategyId(raffleActivity.getStrategyId())
+                    .state(ActivityStateVO.valueOf(raffleActivity.getState()))
+                    .build());
+        }
+        return activityEntities;
+    }
+
+    @Override
     public ActivityCountEntity queryRaffleActivityCountByActivityCountId(Long activityCountId) {
         // 优先从缓存获取
         String cacheKey = Constants.RedisKey.ACTIVITY_COUNT_KEY + activityCountId;

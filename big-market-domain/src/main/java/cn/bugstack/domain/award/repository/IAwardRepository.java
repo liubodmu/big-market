@@ -2,6 +2,9 @@ package cn.bugstack.domain.award.repository;
 
 import cn.bugstack.domain.award.model.aggregate.GiveOutPrizesAggregate;
 import cn.bugstack.domain.award.model.aggregate.UserAwardRecordAggregate;
+import cn.bugstack.domain.award.model.entity.UserAwardRecordEntity;
+
+import java.util.List;
 
 /**
  * @author Fuzhengwei bugstack.cn @小傅哥
@@ -17,5 +20,7 @@ public interface IAwardRepository {
     void saveGiveOutPrizesAggregate(GiveOutPrizesAggregate giveOutPrizesAggregate);
 
     String queryAwardKey(Integer awardId);
+
+    List<UserAwardRecordEntity> queryUserAwardRecordList(String userId);
 
 }

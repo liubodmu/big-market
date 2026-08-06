@@ -20,6 +20,8 @@ public interface IActivityRepository {
 
     ActivityEntity queryRaffleActivityByActivityId(Long activityId);
 
+    List<ActivityEntity> queryActivityList();
+
     ActivityCountEntity queryRaffleActivityCountByActivityCountId(Long activityCountId);
 
     void doSaveNoPayOrder(CreateQuotaOrderAggregate createOrderAggregate);

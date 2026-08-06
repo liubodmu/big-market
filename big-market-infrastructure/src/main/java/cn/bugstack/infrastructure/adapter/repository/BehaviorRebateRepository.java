@@ -6,7 +6,6 @@ import cn.bugstack.domain.rebate.model.entity.TaskEntity;
 import cn.bugstack.domain.rebate.model.valobj.BehaviorTypeVO;
 import cn.bugstack.domain.rebate.model.valobj.DailyBehaviorRebateVO;
 import cn.bugstack.domain.rebate.repository.IBehaviorRebateRepository;
-import cn.bugstack.infrastructure.event.EventPublisher;
 import cn.bugstack.infrastructure.dao.IDailyBehaviorRebateDao;
 import cn.bugstack.infrastructure.dao.ITaskDao;
 import cn.bugstack.infrastructure.dao.IUserBehaviorRebateOrderDao;
@@ -45,8 +44,6 @@ public class BehaviorRebateRepository implements IBehaviorRebateRepository {
     private IDBRouterStrategy dbRouter;
     @Resource
     private TransactionTemplate transactionTemplate;
-    @Resource
-    private EventPublisher eventPublisher;
 
     @Override
     public List<DailyBehaviorRebateVO> queryDailyBehaviorRebateConfig(BehaviorTypeVO behaviorTypeVO) {
@@ -104,22 +101,9 @@ public class BehaviorRebateRepository implements IBehaviorRebateRepository {
             dbRouter.clear();
         }
 
-        // 同步发送MQ消息
-        for (BehaviorRebateAggregate behaviorRebateAggregate : behaviorRebateAggregates) {
-            TaskEntity taskEntity = behaviorRebateAggregate.getTaskEntity();
-            Task task = new Task();
-            task.setUserId(taskEntity.getUserId());
-            task.setMessageId(taskEntity.getMessageId());
-            try {
-                // 发送消息【在事务外执行，如果失败还有任务补偿】
-                eventPublisher.publish(taskEntity.getTopic(), taskEntity.getMessage());
-                // 更新数据库记录，task 任务表
-                taskDao.updateTaskSendMessageCompleted(task);
-            } catch (Exception e) {
-                log.error("写入返利记录，发送MQ消息失败 userId: {} topic: {}", userId, task.getTopic());
-                taskDao.updateTaskSendMessageFail(task);
-            }
-        }
+        // MQ 消息不再在此请求线程同步发送（避免 RabbitMQ 阻塞返利请求）。
+        // task 表已在事务内落库（state=create），由 SendMessageTaskJob 每 5 秒扫描补发。
+        log.info("写入返利记录完成，MQ 消息交由定时任务发送 userId: {} size:{}", userId, behaviorRebateAggregates.size());
 
     }
 

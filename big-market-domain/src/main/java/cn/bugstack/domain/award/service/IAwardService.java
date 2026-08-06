@@ -3,6 +3,8 @@ package cn.bugstack.domain.award.service;
 import cn.bugstack.domain.award.model.entity.DistributeAwardEntity;
 import cn.bugstack.domain.award.model.entity.UserAwardRecordEntity;
 
+import java.util.List;
+
 /**
  * @author Fuzhengwei bugstack.cn @小傅哥
  * @description 奖品服务接口
@@ -16,5 +18,10 @@ public interface IAwardService {
      * 配送发货奖品
      */
     void distributeAward(DistributeAwardEntity distributeAwardEntity);
+
+    /**
+     * 查询用户中奖记录
+     */
+    List<UserAwardRecordEntity> queryUserAwardRecordList(String userId);
 
 }

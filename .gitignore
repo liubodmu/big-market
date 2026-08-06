@@ -40,3 +40,8 @@ build/
 /.idea/
 /docs/dev-ops/log/
 /big-market-app/data/
+
+### 项目本地/临时文件 ###
+output.zip
+.claude/
+frontDev/

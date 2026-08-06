@@ -22,6 +22,21 @@ public interface IRaffleActivityService {
     Response<Boolean> armory(Long activityId);
 
     /**
+     * 查询活动列表
+     *
+     * @return 活动列表
+     */
+    Response<List<ActivityListResponseDTO>> queryActivityList();
+
+    /**
+     * 查询用户中奖记录
+     *
+     * @param userId 用户ID
+     * @return 中奖记录列表
+     */
+    Response<List<UserAwardRecordResponseDTO>> queryUserAwardRecord(String userId);
+
+    /**
      * 活动抽奖接口
      *
      * @param request 请求对象
