@@ -1,0 +1,97 @@
+# big-market 云部署 compose（核心中间件 + 应用一体）
+# 用法：
+#   1. 先构建应用镜像（在项目根目录）：
+#      mvn -pl big-market-app -am package -DskipTests
+#      docker build -f docs/deploy/Dockerfile -t big-market-app:1.0 .
+#   2. 启动：
+#      docker compose -f docs/deploy/docker-compose-app-prod.yml up -d
+#   3. 访问：http://<服务器IP>:8091 （前端页面 + 后端接口同端口）
+#
+# 说明：Nacos 未包含在内（抽奖主流程不依赖；如需 Dubbo 再单独加）。
+version: '3.8'
+
+services:
+  # ---------- 中间件 ----------
+  mysql:
+    image: mysql:8.0.32
+    container_name: big-market-mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+      MYSQL_ROOT_PASSWORD: 123456
+    ports:
+      - "13306:3306"
+    volumes:
+      - ../dev-ops/mysql/sql:/docker-entrypoint-initdb.d:ro
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 15s
+    networks:
+      - bm-net
+
+  redis:
+    image: redis:6.2
+    container_name: big-market-redis
+    restart: always
+    ports:
+      - "16379:6379"
+    networks:
+      - bm-net
+
+  rabbitmq:
+    image: rabbitmq:3.12.9
+    container_name: big-market-rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    networks:
+      - bm-net
+
+  zookeeper:
+    image: zookeeper:3.9.0
+    container_name: big-market-zookeeper
+    restart: always
+    ports:
+      - "2181:2181"
+    networks:
+      - bm-net
+
+  # ---------- 应用 ----------
+  app:
+    image: big-market-app:1.0
+    container_name: big-market-app
+    restart: always
+    ports:
+      - "8091:8091"
+    environment:
+      TZ: Asia/Shanghai
+      SPRING_PROFILES_ACTIVE: prod
+      # 覆盖 application-prod.yml 的连接地址为容器名
+      MYSQL_HOST: mysql
+      REDIS_HOST: redis
+      RABBIT_HOST: rabbitmq
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    networks:
+      - bm-net
+
+networks:
+  bm-net:
+    driver: bridge
+
+volumes:
+  mysql_data:
