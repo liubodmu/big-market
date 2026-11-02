@@ -1,4 +1,8 @@
 package cn.bugstack.domain.award.model.valobj;
+
+import cn.bugstack.types.enums.ResponseCode;
+import cn.bugstack.types.exception.AppException;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -18,5 +22,18 @@ public enum AwardStateVO {
 
     private final String code;
     private final String desc;
+
+    public static AwardStateVO of(String code) {
+        for (AwardStateVO awardState : values()) {
+            if (awardState.getCode().equals(code)) {
+                return awardState;
+            }
+        }
+        // 兼容存量数据：旧版本使用 completed 表示 complete
+        if ("completed".equals(code)) {
+            return complete;
+        }
+        throw new AppException(ResponseCode.UN_ERROR.getCode(), "未知奖品状态值:" + code);
+    }
 
 }

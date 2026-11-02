@@ -24,4 +24,11 @@
                  )
     </insert>
 
+    <select id="queryUserAwardRecordList"
+            resultMap="dataMap" parameterType="cn.bugstack.infrastructure.persistent.po.UserAwardRecord">
+        select user_id, activity_id, strategy_id, order_id, award_id, award_title, award_time, award_state
+        from user_award_record
+        where user_id = #{userId} and activity_id = #{activityId}
+    </select>
+
 </mapper>

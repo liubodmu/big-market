@@ -20,6 +20,10 @@ import org.springframework.transaction.support.TransactionTemplate;
 
 import javax.annotation.Resource;
 
+import java.util.ArrayList;
+import java.util.List;
+import cn.bugstack.domain.award.model.valobj.AwardStateVO;
+
 @Slf4j
 @Component
 
@@ -90,5 +94,27 @@ public class AwardRepository implements IAwardRepository {
             taskDao.updateTaskSendMessageFail(task);
         }
 
+    }
+
+    @Override
+    public List<UserAwardRecordEntity> queryUserAwardRecordList(String userId, Long activityId) {
+        UserAwardRecord userAwardRecordReq = new UserAwardRecord();
+        userAwardRecordReq.setUserId(userId);
+        userAwardRecordReq.setActivityId(activityId);
+        List<UserAwardRecord> userAwardRecordList = userAwardRecordDao.queryUserAwardRecordList(userAwardRecordReq);
+        List<UserAwardRecordEntity> userAwardRecordEntityList = new ArrayList<>(userAwardRecordList.size());
+        for (UserAwardRecord userAwardRecord : userAwardRecordList) {
+            userAwardRecordEntityList.add(UserAwardRecordEntity.builder()
+                    .userId(userAwardRecord.getUserId())
+                    .activityId(userAwardRecord.getActivityId())
+                    .strategyId(userAwardRecord.getStrategyId())
+                    .orderId(userAwardRecord.getOrderId())
+                    .awardId(userAwardRecord.getAwardId())
+                    .awardTitle(userAwardRecord.getAwardTitle())
+                    .awardTime(userAwardRecord.getAwardTime())
+                    .awardState(AwardStateVO.of(userAwardRecord.getAwardState()))
+                    .build());
+        }
+        return userAwardRecordEntityList;
     }
 }
